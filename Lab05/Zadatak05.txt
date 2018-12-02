@@ -4,3 +4,6 @@ a) L1∪L2,
 b) L1∩ L2.
 Liste osim pokazivača na slijedeću strukturu imaju i jedan cjelobrojni element, po kojem su
 sortirane.
+
+Unija skupova A i B je skup koji čine svi elementi koji pripadaju barem jednom od skupova A i B.
+Presjek ili zajednički dio dva skupa je skup koji čine elementi koji su u skupu A i u skupu B.
