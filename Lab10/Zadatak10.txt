@@ -1,0 +1,5 @@
+10. Prethodnom zadatku dodati algoritme:
+a) Shellsort (koristeći inkrement po izboru)
+b) Quicksort
+c) Mergesort.
+Napomena:Za QuickSort koristiti Cutoff = 20 
