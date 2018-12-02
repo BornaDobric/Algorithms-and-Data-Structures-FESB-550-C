@@ -1,0 +1,6 @@
+7. Napisati program koji pomoću vezanih listi simulira rad:
+a) cirkularnog stoga (maksimalni broj elemenata na stogu definira korisnik kad se program
+pokrene),
+b) reda s prioritetom (prioritet može biti od 1-5 i generira se slučajno, a veći broj znači i veći
+prioritet).
+Napomena: Funkcija "push" sprema cijeli broj, slučajno generirani u opsegu od 10 -100.
