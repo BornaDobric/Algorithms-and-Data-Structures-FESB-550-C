@@ -1,0 +1,14 @@
+9. Napiši program koji generira N slučajnih brojeva i sprema ih u niz. Generirani niz treba sortirati
+primjenom svih slijedećih algoritama:
+a) Exchange sort
+b) Selection sort
+c) Insertion sort
+d) Bubble sort
+Za svaki algoritam potrebno je ispisati i vrijeme potrebno se sortira niz.
+Napomene:
+- Program testirati za različite N (100, 1000, 10000, 100000).
+- Kako bi se isti niz mogao koristiti za testiranje različitih metoda potrebno je kreirati kopiju originalnog niza
+pomoću koje će se vratiti početne vrijednosti originalnog niza prije primjene nove metode.
+- Za mjerenje vremena koristiti funkciju GetTickCount(), deklariranu u windows.h, koja ispisuje koliko je
+vremena u ms proteklo od trenutka pokretanja windowsa. Vrijeme potrebno za izvršenje algoritma je:
+ t_prije_algoritma – t_poslije_algoritma. 
