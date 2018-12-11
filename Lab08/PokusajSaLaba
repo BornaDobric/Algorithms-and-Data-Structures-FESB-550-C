@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string>
+#include<string.h>
+#define STRING_MAX_LENGHT 1024
+
+typedef struct _cvor* Position;
+typedef struct _cvor {
+	int element;
+	Position next;
+}Cvor;
+
+int PushStog(Position head, int broj);
+int PopStog(Position head);
+int PrintStog(Position head);
+Position CreateNewElement(int broj);
+int DeleteAll(Position head);
+int ReadFromFile(Position head);
+int ParseString(char *buffer);
+int main(int argc, char *argv[]) {
+	Cvor stog;
+	stog.next = NULL;
+	ReadFromFile(&stog);
+
+	return 0;
+}
+int ReadFromFile(Position head) {
+	FILE *fp;
+	char fileName[STRING_MAX_LENGHT];
+	char buffer[STRING_MAX_LENGHT];
+	int broj;
+	printf("\r\nUnesite ime datoteke za citanje: ");
+	scanf(" %s", fileName);
+	fp = fopen(fileName, "r");
+	if (fp == NULL)
+		printf("\r\nDoslo je do greske prilikom otvaranja datoteke!\r\n");
+	else
+	{
+		fgets(buffer, STRING_MAX_LENGHT, fp);
+		while (buffer!='\0')
+		{
+			broj = ParseString(buffer);
+			PushStog(head, broj);
+			printf("\r\nNa stog se upisuje: %d\r\n", broj);
+		}
+	}
+	fclose(fp);
+	return 0;
+}
+int ParseString(char *buffer) {
+	int broj;
+	int offset = 0;
+	sscanf(buffer, "%d %n", &broj, &offset);
+	return broj;
+}
+int PushStog(Position head, int broj) {
+	Position temp;
+	temp = CreateNewElement(broj);
+	if (temp == NULL)
+		printf("\r\nDoslo je do greske prilikom alokacije memorije!\r\n");
+	else
+	{
+		temp->next = head->next;
+		head->next = temp;
+	}
+	return 0;
+}
+int PopStog(Position head) {
+	Position temp;
+	temp = head->next;
+	if (temp == NULL)
+		printf("\r\nLista je prazna!\r\n");
+	else
+	{
+		head->next = temp->next;
+		printf("\r\nIz liste se izbacuje: %d\r\n", temp->element);
+		free(temp);
+	}
+	return 0;
+}
+int PrintStog(Position head) {
+	while (head!=NULL)
+	{
+		printf(" %d", head->element);
+		head = head->next;
+	}
+	return 0;
+}
+Position CreateNewElement(int broj) {
+	Position temp;
+	temp = (Position)malloc(sizeof(Cvor));
+	if (temp == NULL)
+		return NULL;
+	else
+	{
+		temp->element = broj;
+		temp->next = NULL;
+	}
+	return temp;
+}
+int DeleteAll(Position head) {
+	Position temp;
+	temp = head->next;
+	while (head->next!=NULL)
+	{
+		head->next = temp->next;
+		free(temp);
+	}
+	return 0;
+}
