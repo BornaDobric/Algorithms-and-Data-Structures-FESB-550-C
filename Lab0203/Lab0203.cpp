@@ -311,6 +311,7 @@ void ReadListFromFile(Position head) {
 				fscanf(fp," %s %s %d", temp->ime, temp->prezime, &temp->godinaRodenja); //ucitaj podatke u temp
 				temp->next = head->next; // promjena pokazivaca na iduci element
 				head->next = temp;
+				head = head->next; //jer inace upisuje od kraja datoteke
 			}
 		}
 		fclose(fp); //zatvaranje dat
