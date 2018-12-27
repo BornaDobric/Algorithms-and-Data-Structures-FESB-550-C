@@ -171,11 +171,11 @@ int ZbrojiPolinome(Position pp, Position dp, Position sumaPolinoma) {
 	else
 		temp = pp;
 
-	while (temp!=NULL) //?????????????
+	while (temp!=NULL) //ako je osta koji element do kraja polinoma
 	{
 		DodajUListuSortirano(sumaPolinoma, temp->koeficijent, temp->eksponent);
-		temp = temp->next;
-	} //???????????????
+		temp = temp->next; //iduci element
+	} 
 	return 0;
 }
 int PomnoziPolinome(Position pp, Position dp, Position umnozakPolinoma) {
