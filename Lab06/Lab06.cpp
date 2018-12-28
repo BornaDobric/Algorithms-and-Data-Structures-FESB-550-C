@@ -93,7 +93,7 @@ int PushStog(Position head) { //zadnji koji je usa se prvi skida
 int PushQueue(Position head) { //prvi koji je usa se prvi skida
 	Position temp;
 	int broj;
-	static Position lastElement = head; //zadnji element je head
+	static Position lastElement = head; //zadnji element je head, static variables preserve their previous value in their previous scope and are not initialized again in the new scope
 	broj = GetRandomNumber();
 	temp = CreateNewElement(broj);
 	if (temp == NULL)
