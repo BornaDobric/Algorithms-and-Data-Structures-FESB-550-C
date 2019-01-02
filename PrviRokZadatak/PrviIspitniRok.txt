@@ -1,0 +1,8 @@
+1. ispitni rok laboratorijskih vjezbi iz AISP-a
+
+Tekst zadatka:
+za 2: Iz datoteke drzave.txt ucitati imena drzava u vezanu listu, te ih pri unosu sortirati. Struktura uz ime drzave i
+pokazivac na sljedeci element strukture mora imati i pokazivac na zasebnu listu gradova.
+
+za 5: Iz datoteke gradovi.txt ucitati imena gradova te ih postaviti u listu na koju pokazuje pokazivac iz svakog cvora
+drzave za koju taj grad pripada.
