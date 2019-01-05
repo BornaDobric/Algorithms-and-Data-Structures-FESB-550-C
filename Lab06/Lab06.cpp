@@ -92,18 +92,18 @@ int PushStog(Position head) { //zadnji koji je usa se prvi skida
 }
 int PushQueue(Position head) { //prvi koji je usa se prvi skida
 	Position temp;
-	int broj;
-	static Position lastElement = head; //zadnji element je head, static variables preserve their previous value in their previous scope and are not initialized again in the new scope
-	broj = GetRandomNumber();
+	int broj = GetRandomNumber();
 	temp = CreateNewElement(broj);
-	if (temp == NULL)
-		printf("\r\nDoslo je do greske prilikom alokacije memorije!\r\n");
+	if (temp==NULL)
+		printf("Doslo je do greske prilikom alokacije memorije!\r\n");
 	else
 	{
-		lastElement->next = temp; //promjena pokazivaca
-		lastElement = temp; //novi zadnji element je temp koji je unesen
-		printf("\r\nPushed number: %d\r\n", broj); 
+		while (head->next != NULL)
+			head = head->next; //vrti do zadnjeg elementa
+		temp->next = head->next; //ubaci novi element
+		head->next = temp;
 	}
+	printf("Pushed number: %d\r\n", broj); //upisani broj
 	return 0;
 }
 int Pop(Position head) {
