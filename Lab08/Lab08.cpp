@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string>
 #include<string.h>
+#include<time.h>
 #define STRING_MAX_LENGHT 50
 
 typedef struct _cvor* Position;
@@ -13,8 +14,8 @@ typedef struct _cvor {
 int ReadFromFile(Position head);
 int ReadString(Position head, char *buffer);
 int PushStack(Position head, int broj);
-int PopStack(Position head);
 Position CreateNewElement(int broj);
+int PopStack(Position head);
 int PrintStack(Position head);
 int DeleteAll(Position head);
 
@@ -29,59 +30,60 @@ int ReadFromFile(Position head) {
 	FILE *fp;
 	char fileName[STRING_MAX_LENGHT];
 	char buffer[STRING_MAX_LENGHT];
-	printf("Unesite naziv datoteke za citanje: ");
+	printf("\r\nUnesite naziv datoteke za citanje: ");
 	scanf(" %s", fileName);
 	fp = fopen(fileName, "r");
 	if (fp == NULL)
-		printf("\r\nDoslo je do greske prilikom otvaranja datoteke <%s>!\r\n",fileName);
+		printf("\r\nDoslo je do greske prilikom alokacije memorije!\r\n");
 	else
 	{
-		while (!feof(fp)) //dok nije kraj datoteke
+		while (!feof(fp))
 		{
-			fgets(buffer, STRING_MAX_LENGHT, fp); //citaj mi red iz datoteke u buffer
-			ReadString(head, buffer); //proslijedi u funkciju buffer i stog
+			fgets(buffer, STRING_MAX_LENGHT, fp);
+			ReadString(head, buffer);
 		}
 	}
-	fclose(fp); //zatvori datoteku
+	fclose(fp);
 	return 0;
 }
 int ReadString(Position head, char *buffer) {
-	int offset; //offset(%n) postavlja brojac ovisno o prethodno ispisanom broju znakova
-	char znak;
-	int znamenka;
+	int offset, znamenka;
 	int operand1, operand2;
-	while (sscanf(buffer,"%c %n",&znak,&offset)!=EOF) //EOF-end of file
+	char znak;
+	int rezultat;
+	while (sscanf(buffer, " %c %n",&znak,&offset)!=EOF)
 	{
-		if (isdigit(znak)) { //ako je znamenka
-			znamenka = atoi(&znak); //pretvori znak u znamenku
-			PushStack(head, znamenka); //upisi na stog znamenku
+		if (isdigit(znak))
+		{
+			znamenka = atoi(&znak);
+			PushStack(head, znamenka);
 		}
 		else
-		{	//ako je procitan operator prvo skini dva operanda sa stoga
-			operand1 = PopStack(head); //pop prvi element
-			operand2 = PopStack(head); //pop drugi element
+		{
+			operand1 = PopStack(head);
+			operand2 = PopStack(head);
 			switch (znak)
 			{
 			case '+':
-				PushStack(head, operand2 + operand1);
+				PushStack(head, operand1 + operand2);
 				break;
 			case '-':
-				PushStack(head, operand2 - operand1);
+				PushStack(head, operand1 - operand2);
 				break;
 			case '*':
-				PushStack(head, operand2 * operand1);
+				PushStack(head, operand1 * operand2);
 				break;
 			case '/':
-				PushStack(head, operand2 / operand1);
+				PushStack(head, operand1 / operand2);
 				break;
 			default:
 				printf("\r\nGreska!\r\n");
 				break;
 			}
 		}
-		buffer += offset; //uvecaj za offset do iduceg znaka
+		buffer += offset;
 	}
-	printf("\r\nRezultat je: %d\r\n\r\n", PopStack(head)); //zadnji element koji je upisan na stog je rezultat i njega poppamo
+	printf("\r\nRezultat je: %d\r\n\r\n", PopStack(head));
 	return 0;
 }
 int PushStack(Position head, int broj) {
@@ -91,52 +93,52 @@ int PushStack(Position head, int broj) {
 		printf("\r\nDoslo je do greske prilikom alokacije memorije!\r\n");
 	else
 	{
-		temp->next = head->next; //prebacivanje pokazivaca za upis elementa u listu
+		temp->next = head->next;
 		head->next = temp;
 	}
-	printf("\r\nPushed number: %d\r\n", temp->element); //upisali smo broj
+	printf("\r\nPushed number: %d\r\n", broj);
 	return 0;
 }
 Position CreateNewElement(int broj) {
 	Position temp;
 	temp = (Position)malloc(sizeof(Cvor));
 	if (temp == NULL)
-		return NULL; //provjera greske u funkciji iz koje smo pozvali
+		return NULL;
 	else
 	{
-		temp->element = broj; //upis broja u element
-		temp->next = NULL; 
+		temp->element = broj;
+		temp->next = NULL;
 	}
 	return temp;
 }
 int PopStack(Position head) {
 	Position temp;
 	temp = head->next;
-	if (temp == NULL)
+	if (temp==NULL)
 		printf("\r\nLista je prazna!\r\n");
 	else
 	{
-		head->next = temp->next; //klasika za pop
-		printf("\r\nPopped number: %d\r\n", temp->element); //poppali smo 
-		free(temp); //oslobodi memoriju za poppani element
+		head->next = temp->next;
+		printf("\r\nPopped element: %d", temp->element);
+		free(temp);
 	}
 	return 0;
 }
 int PrintStack(Position head) {
-	while (head!=NULL) //dok nije kraj liste
+	while (head!=NULL)
 	{
-		printf("\r\n%d", head->element);
-		head = head->next; //iduci element
+		printf(" %d", head->element);
+		head = head->next;
 	}
-	return 0; //PrintStack ne triba uopce u ovon zadatku al neka stoji sad
+	return 0;
 }
 int DeleteAll(Position head) {
 	Position temp;
-	temp = head->next;
-	while (head->next!=NULL) //dok nije kraj liste
+	while (head->next!=NULL)
 	{
-		head->next = temp->next; //promjena pokazivaca
-		free(temp); //oslobodi temp
+		temp = head->next;
+		head->next = temp->next;
+		free(temp);
 	}
 	return 0;
 }
