@@ -12,3 +12,9 @@ pomoću koje će se vratiti početne vrijednosti originalnog niza prije primjene
 - Za mjerenje vremena koristiti funkciju GetTickCount(), deklariranu u windows.h, koja ispisuje koliko je
 vremena u ms proteklo od trenutka pokretanja windowsa. Vrijeme potrebno za izvršenje algoritma je:
  t_prije_algoritma – t_poslije_algoritma. 
+ 
+10. Prethodnom zadatku dodati algoritme:
+a) Shellsort (koristeći inkrement po izboru)
+b) Quicksort
+c) Mergesort.
+Napomena:Za QuickSort koristiti Cutoff = 20 
