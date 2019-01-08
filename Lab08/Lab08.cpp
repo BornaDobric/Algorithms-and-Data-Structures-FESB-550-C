@@ -51,7 +51,7 @@ int ReadString(Position head, char *buffer) {
 	int operand1, operand2;
 	char znak;
 	int rezultat;
-	while (sscanf(buffer, " %c %n",&znak,&offset)!=EOF)
+	while (sscanf(buffer, " %c %n", &znak, &offset) != EOF)
 	{
 		if (isdigit(znak))
 		{
@@ -60,8 +60,9 @@ int ReadString(Position head, char *buffer) {
 		}
 		else
 		{
-			operand1 = PopStack(head);
 			operand2 = PopStack(head);
+			operand1 = PopStack(head);
+
 			switch (znak)
 			{
 			case '+':
@@ -114,18 +115,21 @@ Position CreateNewElement(int broj) {
 int PopStack(Position head) {
 	Position temp;
 	temp = head->next;
-	if (temp==NULL)
+	int retVal = 0;
+
+	if (temp == NULL)
 		printf("\r\nLista je prazna!\r\n");
 	else
 	{
 		head->next = temp->next;
 		printf("\r\nPopped element: %d", temp->element);
+		retVal = temp->element;
 		free(temp);
 	}
-	return 0;
+	return retVal;
 }
 int PrintStack(Position head) {
-	while (head!=NULL)
+	while (head != NULL)
 	{
 		printf(" %d", head->element);
 		head = head->next;
@@ -134,7 +138,7 @@ int PrintStack(Position head) {
 }
 int DeleteAll(Position head) {
 	Position temp;
-	while (head->next!=NULL)
+	while (head->next != NULL)
 	{
 		temp = head->next;
 		head->next = temp->next;
