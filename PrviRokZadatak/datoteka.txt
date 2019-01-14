@@ -3,3 +3,6 @@ Italija
 Francuska
 Slovenija
 Bugarska
+Brazil
+Hungary
+Argentina
