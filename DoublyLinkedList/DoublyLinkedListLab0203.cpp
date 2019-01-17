@@ -28,11 +28,11 @@ StudentPodaci GetStudentDataFromConsole();
 int Insert(Position head, StudentPodaci studentPodaci);
 int InsertOnEnd(Position head, StudentPodaci studentPodaci);
 int PrintList(Position head);
-int InsertBefore(Position head, StudentPodaci studentPodaci);
-int InsertAfter(Position head, StudentPodaci studentPodaci);
+int InsertBefore(Position head, Position toInsertBefore, StudentPodaci studentPodaci);
+int InsertAfter(Position head, Position toInsertAfter, StudentPodaci studentPodaci);
 Position FindElement(Position head, char *prezime);
 int PrintElement(Position p);
-int DeleteElement(Position p, char *prezime);
+int DeleteElement(Position head, Position toDelete);
 int DeleteAll(Position head);
 
 int main(int argc, char *argv[]) {
@@ -63,13 +63,22 @@ int main(int argc, char *argv[]) {
 			printf("\r\nUnesite prezime osobe koju trazite: ");
 			scanf(" %s", prezime);
 			bufferPosition = FindElement(&head, prezime);
-			PrintElement(bufferPosition);
+			if (bufferPosition == NULL)
+				printf("\r\nStudent ne postoji u listi!\r\n");
+			else
+				PrintElement(bufferPosition);
 			break;
 		case '5':
 			printf("\r\nUnesite prezime osobe koju brisete iz liste: ");
 			scanf(" %s", prezime);
 			bufferPosition = FindElement(&head, prezime);
-			DeleteElement(bufferPosition, prezime);
+			if (bufferPosition==NULL)
+				printf("\r\nStudent <%s> nije upisan u listu!\r\n", prezime);
+			else
+			{
+				DeleteElement(&head, bufferPosition);
+				PrintList(head.next);
+			}
 			break;
 		case '6':
 			bufferStudent = GetStudentDataFromConsole();
@@ -80,7 +89,7 @@ int main(int argc, char *argv[]) {
 				printf("\r\nStudent <%s> nije upisan u listu!\r\n", prezime);
 			else
 			{
-				InsertBefore(bufferPosition, bufferStudent);
+				InsertBefore(&head, bufferPosition, bufferStudent);
 				PrintList(head.next);
 			}
 			break;
@@ -93,7 +102,7 @@ int main(int argc, char *argv[]) {
 				printf("\r\nStudent <%s> nije upisan u listu!\r\n", prezime);
 			else
 			{
-				InsertAfter(bufferPosition->next, bufferStudent);
+				InsertAfter(bufferPosition, &head, bufferStudent);
 				PrintList(head.next);
 			}
 			break;
@@ -187,18 +196,17 @@ int PrintList(Position head) {
 			lastElement = head;
 			head = head->next;
 		}
-		/*printf("\r\nProlazak kroz listu od kraja do pocetka: \r\n");
+		printf("\r\nProlazak kroz listu od kraja do pocetka: \r\n");
 		while (lastElement != NULL)
 		{
 			printf(" %s %s %d\r\n", lastElement->ime, lastElement->prezime, lastElement->godinaRodenja);
 			lastElement = lastElement->prev;
-		}*/
+		}
 	}
 	return 0;
 }
-int InsertBefore(Position head, StudentPodaci studentPodaci) {
+int InsertBefore(Position head, Position toInsertBefore, StudentPodaci studentPodaci) {
 	Position temp;
-	Position headAtStart = head;
 	temp = (Position)malloc(sizeof(Student));
 	if (temp == NULL)
 		printf(ALLOCATION_ERROR);
@@ -208,15 +216,17 @@ int InsertBefore(Position head, StudentPodaci studentPodaci) {
 		strcpy(temp->prezime, studentPodaci.prezime);
 		temp->godinaRodenja = studentPodaci.godinaRodenja;
 
-		temp->next = head->next;
-		head->next = temp;
-		temp->prev = head;
-		if (temp->prev = NULL)
+		temp->prev = toInsertBefore->prev;
+		toInsertBefore->prev = temp;
+		temp->next = toInsertBefore;
+		if (temp->prev != NULL)
 			temp->prev->next = temp;
+		else
+			head->next = temp;
 	}
 	return 0;
 }
-int InsertAfter(Position head, StudentPodaci studentPodaci) {
+int InsertAfter(Position toInsertAfter, Position head, StudentPodaci studentPodaci) {
 	Position temp;
 	temp = (Position)malloc(sizeof(Student));
 	if (temp == NULL)
@@ -227,32 +237,33 @@ int InsertAfter(Position head, StudentPodaci studentPodaci) {
 		strcpy(temp->prezime, studentPodaci.prezime);
 		temp->godinaRodenja = studentPodaci.godinaRodenja;
 
-		temp->next = head->next;
-		head->next = temp;
-		temp->prev = head;
+		temp->next = toInsertAfter->next;
+		toInsertAfter->next = temp;
+		temp->prev = toInsertAfter;
 		if (temp->next != NULL)
 			temp->next->prev = temp;
 	}
 	return 0;
 }
 Position FindElement(Position head, char *prezime) {
-	while (head->next != NULL && strcmpi(head->next->prezime, prezime) != 0)
+	while (head != NULL && strcmpi(head->prezime, prezime) != 0)
 		head = head->next;
-	if (head->next == NULL)
-		return NULL;
 	return head;
 }
 int PrintElement(Position p) {
 	printf(" %s %s %d\r\n", p->ime, p->prezime, p->godinaRodenja);
 	return 0;
 }
-int DeleteElement(Position head, char *prezime) {
-	while (head->next != NULL && strcmpi(head->next->prezime, prezime) != 0)
-		head = head->next;
-	head->prev->next = head->next;
-	head->next->prev = head->prev;
-	printf("\r\nIz liste se brise: %s %s %d", head->ime, head->prezime, head->godinaRodenja);
-	free(head);
+int DeleteElement(Position head, Position toDelete) {
+	printf("\r\nIz liste se brise: %s %s %d", toDelete->ime, toDelete->prezime, toDelete->godinaRodenja);
+	if (head->next == toDelete)
+		head->next = toDelete->next;
+	if (toDelete->next != NULL)
+		toDelete->next->prev = toDelete->prev;
+	if (toDelete->prev != NULL)
+		toDelete->prev->next = toDelete->next;
+	free(toDelete);
+	printf("\r\nElement uspjesno izbrisan!\r\n");
 	return 0;
 }
 int DeleteAll(Position head) {
