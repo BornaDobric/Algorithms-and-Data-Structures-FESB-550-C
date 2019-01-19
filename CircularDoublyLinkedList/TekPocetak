@@ -1,0 +1,172 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string>
+#include<string.h>
+#include<time.h>
+#define STRING_MAX_LENGHT 50
+#define EMPTY_LIST "\r\nLista je prazna!"
+#define NO_STUDENT_IN_FILE "\r\nStudent kojeg trazite ne postoji u listi!"
+#define ALLOCATION_ERROR "\r\nDoslo je do greske prilikom alokacije memorije!"
+
+typedef struct _student* Position;
+typedef struct _student {
+	int godinaRodenja;
+	char ime[STRING_MAX_LENGHT];
+	char prezime[STRING_MAX_LENGHT];
+	Position next;
+	Position prev;
+}Student;
+
+typedef struct _studentPodaci {
+	int godinaRodenja;
+	char ime[STRING_MAX_LENGHT];
+	char prezime[STRING_MAX_LENGHT];
+}StudentPodaci;
+
+int PrintMenu();
+StudentPodaci GetStudentDataFromConsole();
+int Insert(Position head, StudentPodaci studentPodaci);
+int PrintList(Position head);
+int PrintList(Position head);
+int InsertOnEnd(Position head, StudentPodaci studentPodaci);
+int InsertBefore(Position head, StudentPodaci studentPodaci);
+int InsertAfter(Position head, StudentPodaci studentPodaci);
+Position FindPreviousElement(Position head, char *prezime);
+int DeleteElement(Position head);
+int DeleteAll(Position head);
+
+int main(int argc, char *argv[]) {
+	Student head;
+	StudentPodaci bufferStudent;
+	Position bufferPosition;
+	char izbor = 0;
+	char prezime[STRING_MAX_LENGHT];
+	head.next = NULL;
+	head.prev = NULL;
+
+	while (izbor!='k' && izbor!='K')
+	{
+		PrintMenu();
+		scanf(" %c", &izbor);
+
+		switch (izbor)
+		{
+		case '1':
+			bufferStudent = GetStudentDataFromConsole();
+			Insert(&head, bufferStudent);
+			break;
+		case '2':
+			PrintList(head.next);
+			break;
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case 'k':
+		case 'K':
+			printf("\r\nIzlaz iz programa!\r\n");
+			break;
+		default:
+			printf("\r\nPogresan odabir <%c>! Pokusajte ponovno!\r\n", izbor);
+			break;
+		}
+	}
+	return 0;
+}
+int PrintMenu() {
+	printf("\r\n1.Unos elementa na pocetak liste.");
+	printf("\r\n2.Ispis liste.");
+	printf("\r\n3.Unos elementa na kraj liste.");
+	printf("\r\n4.Pronadi studenta po prezimenu.");
+	printf("\r\n5.Izbrisi studenta po prezimenu.");
+	printf("\r\n6.Unos elementa prije elementa trazenog po prezimenu.");
+	printf("\r\n7.Unos elementa nakon elementa trazenog po prezimenu.");
+	printf("\r\nK.Kraj programa.");
+	printf("\r\nVas odabir: ");
+	return 0;
+}
+StudentPodaci GetStudentDataFromConsole() {
+	StudentPodaci tempPodaci;
+	printf("\r\nUnesite ime, prezime i godinu rodenja studenta: ");
+	scanf(" %s %s %d", tempPodaci.ime, tempPodaci.prezime, &tempPodaci.godinaRodenja);
+	return tempPodaci;
+}
+int Insert(Position head, StudentPodaci studentPodaci) {
+	Position temp, last;
+	temp = (Position)malloc(sizeof(Student));
+	if (temp == NULL)
+		printf(ALLOCATION_ERROR);
+	else
+	{
+		strcpy(temp->ime, studentPodaci.ime);
+		strcpy(temp->prezime, studentPodaci.prezime);
+		temp->godinaRodenja = studentPodaci.godinaRodenja;
+		
+		if (head->next==NULL)
+		{
+			temp->next = temp;
+			temp->prev = temp;
+			head->next = temp;
+		}
+		else if (head->next->prev = head->next)
+		{
+			temp->next = head->next;
+			temp->prev = head->next;
+			head->next->prev = temp;
+			head->next->next = temp;
+			head->next = temp;
+		}
+		else
+		{
+			last = head->next->prev;
+			temp->next = head->next;
+			temp->prev = last;
+
+			last->next = temp;
+			head->next->prev = temp;
+			head->next = temp;
+		}
+	}
+	return 0;
+}
+int PrintList(Position head) {
+	Position temp = head; //temp=head->next šta je zapravo prvi el
+	if (head == NULL)
+		printf(EMPTY_LIST);
+	else
+	{
+		while (temp->next!=head)
+		{
+			printf(" %s %s %d\r\n", temp->ime, temp->prezime, temp->godinaRodenja);
+			temp = temp->next;
+		}
+		printf(" %s %s %d\r\n", temp->ime, temp->prezime, temp->godinaRodenja); //ovo je zapravo taj prvi element	
+	}
+	return 0;
+}
+int InsertOnEnd(Position head, StudentPodaci studentPodaci) {
+
+	return 0;
+}
+int InsertBefore(Position head, StudentPodaci studentPodaci) {
+
+	return 0;
+}
+int InsertAfter(Position head, StudentPodaci studentPodaci) {
+
+	return 0;
+}
+Position FindPreviousElement(Position head, char *prezime) {
+	Position temp;
+
+	return temp;
+}
+int DeleteElement(Position head) {
+
+	return 0;
+}
+int DeleteAll(Position head) {
+	
+	return 0;
+}
