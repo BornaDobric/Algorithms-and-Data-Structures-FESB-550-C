@@ -1,0 +1,51 @@
+SSL stands for Secure Sockets Layer and, in short, it's the standard technology for keeping an 
+internet connection secure and safeguarding any sensitive data that is being sent 
+between two systems, preventing criminals from reading and modifying any information transferred, including potential personal details.
+
+A Certificate Authority (CA) is an entity that is trusted to sign an SSL certificate. Certificate Authorities are responsible for 
+verification, approval, and revocation of SSL Certificates. CAs adhere to the latest encryption standards and security protocols.
+Browsers and applications such as Chrome, Opera, Mozilla, Microsoft, Android and many others, are the entities that
+define the official rules and guidelines for Certificate Authorities. 
+All browsers store the information about the trusted CAs (root store) in their installation pack.
+
+TCP/IP stands for Transmission Control Protocol/Internet Protocol, which is a set of networking protocols 
+that allows two or more computers to communicate.
+TCP divides a message or file into packets that are transmitted over the internet and then reassembled when they reach their destination.
+IP is responsible for the address of each packet so that it gets to the correct destination.
+
+HTTP means HyperText Transfer Protocol. HTTP is the underlying protocol used by the World Wide Web and this protocol defines 
+how messages are formatted and transmitted, and what actions Web servers and browsers should take in response to various commands.
+
+There is a trade off the C designers have made. That's to say, they made the decision to put speed above safety. C won't:
+-Check array index bound
+-Check for uninitialized variable values
+-Check for memory leaks
+-Check for null pointer dereference.
+
+A Linked List is a linear collection of data elements, called nodes, each pointing to the next node by means of a pointer. 
+It is a data structure consisting of a group of nodes which together represent a sequence.
+
+Singly-linked list: linked list in which each node points to the next node and the last node points to null.
+
+Doubly-linked list: linked list in which each node has two pointers, p and n, such that p points to the 
+previous node and n points to the next node; the last node's n pointer points to null.
+
+Circular-linked list: linked list in which each node points to the next node and the last node points back to the first node.
+
+A Stack is a collection of elements, with two principle operations: push, which adds to the collection, and pop, which 
+removes the most recently added element.
+Last in, first out data structure (LIFO): the most recently added object is the first to be removed.
+
+A Queue is a collection of elements, supporting two principle operations: enqueue, which inserts an element into the queue, 
+and dequeue, which removes an element from the queue.
+First in, first out data structure (FIFO): the oldest added object is the first to be removed.
+
+In computer science, a tree is a widely used abstract data type (ADT)—or data structure implementing this ADT—that simulates 
+a hierarchical tree structure, with a root value and subtrees of children with a parent node, represented 
+as a set of linked nodes.
+
+A Binary Tree is a type of data structure in which each node has at most two children (left child and right child). Binary 
+trees are used to implement binary search trees and binary heaps, and are used for efficient searching and sorting.
+
+Hashing is used to map data of an arbitrary size to data of a fixed size. The values returned by a hash function are called 
+hash values, hash codes, or simply hashes. If two keys map to the same value, a collision occurs
