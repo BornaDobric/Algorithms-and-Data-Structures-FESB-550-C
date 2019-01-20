@@ -4,101 +4,99 @@
 #include<string.h>
 #include<time.h>
 #define STRING_MAX_LENGHT 50
-#define ALLOCATION_ERROR "\r\nDoslo je do greske prilikom alokacije memorije!\r\n"
-#define FILE_OPEN_ERROR "\r\nDoslo je do greske prilikom otvaranja datoteke <%s>!\r\n"
-#define FILENAME "drzave.txt"
+#define FILE_OPEN_ERROR "\r\nDoslo je do greske prilikom otvaranja datoteke <%s>!"
+#define ALLOCATION_ERROR "\r\nDoslo je do greske prilikom alokacije memorije!"
+#define EMPTY_LIST "\r\nLista je prazna!"
+#define FILE_NAME "drzave.txt"
 
-typedef struct _cities* PositionCities;
-typedef struct _cities {
-	char cityName[STRING_MAX_LENGHT];
-	PositionCities next;
-}CitiesList;
+typedef struct _grad* PositionGrad;
+typedef struct _grad {
+	char nazivGrada[STRING_MAX_LENGHT];
+	PositionGrad next;
+}Grad;
 
-typedef struct _states* PositionStates;
-typedef struct _states {
-	char stateName[STRING_MAX_LENGHT];
-	PositionCities cityList;
-	PositionStates next;
-}StatesList;
+typedef struct _drzava* PositionDrzava;
+typedef struct _drzava {
+	char nazivDrzave[STRING_MAX_LENGHT];
+	PositionDrzava nextDrzava;
+	PositionGrad nextGrad;
+}Drzava;
 
-int ReadFromFile(PositionStates head, char *fileName);
-int FindPlaceForSortedInput(PositionStates head, PositionStates temp);
-int InsertElement(PositionStates head, PositionStates temp);
-int PrintList(PositionStates head);
-int DeleteAll(PositionStates head);
+int ReadFromFile(PositionDrzava head);
+int InsertElementInList(PositionDrzava head, PositionDrzava tempDrzava);
+int FindPlaceForSortedInput(PositionDrzava head, PositionDrzava tempDrzava);
+int PrintList(PositionDrzava head);
+int DeleteAll(PositionDrzava head);
 
 int main(int argc, char *argv[]) {
-	StatesList statesList;
-	CitiesList cityList;
+	Drzava drzava;
+	Grad grad;
+	drzava.nextDrzava = NULL;
+	grad.next = NULL;
 
-	statesList.next = NULL;
-	cityList.next = NULL;
-
-	ReadFromFile(&statesList, FILENAME);
-	PrintList(statesList.next);
-
-	DeleteAll(&statesList);
-	PrintList(statesList.next);
+	ReadFromFile(&drzava);
+	PrintList(drzava.nextDrzava);
 	printf("\r\n");
+	DeleteAll(&drzava);
 	return 0;
 }
-int ReadFromFile(PositionStates head, char *fileName) {
+int ReadFromFile(PositionDrzava head) {
 	FILE *fp;
-	PositionStates tempStates;
-	fp = fopen(fileName, "r");
+	PositionDrzava tempDrzava;
+	char buffer[STRING_MAX_LENGHT];
+	fp = fopen(FILE_NAME, "r");
 	if (fp == NULL)
-		printf(FILE_OPEN_ERROR, fileName);
+		printf(FILE_OPEN_ERROR);
 	else
 	{
 		while (!feof(fp))
 		{
-			tempStates = (PositionStates)malloc(sizeof(StatesList));
-			fscanf(fp, " %s", tempStates->stateName);
-			FindPlaceForSortedInput(head, tempStates);
+			tempDrzava = (PositionDrzava)malloc(sizeof(Drzava));
+			if (tempDrzava == NULL)
+				printf(ALLOCATION_ERROR);
+			else
+			{
+				fscanf(fp, " %s", tempDrzava->nazivDrzave);
+				FindPlaceForSortedInput(head, tempDrzava);
+			}
 		}
 		fclose(fp);
 	}
-
 	return 0;
 }
-int FindPlaceForSortedInput(PositionStates head, PositionStates temp) {
-	while (head->next != NULL && strcmpi(head->next->stateName, temp->stateName) > 0)
-		head = head->next;
-	InsertElement(head, temp);
+int InsertElementInList(PositionDrzava head, PositionDrzava tempDrzava) {
+	tempDrzava->nextDrzava = head->nextDrzava;
+	head->nextDrzava = tempDrzava;
 	return 0;
 }
-int InsertElement(PositionStates head, PositionStates temp) {
-	if (temp == NULL)
-		printf(ALLOCATION_ERROR);
-	else
-	{
-		temp->next = head->next;
-		head->next = temp;
-	}
+int FindPlaceForSortedInput(PositionDrzava head, PositionDrzava tempDrzava) {
+	while (head->nextDrzava != NULL && strcmpi(head->nextDrzava->nazivDrzave, tempDrzava->nazivDrzave) < 0)
+		head = head->nextDrzava;
+	InsertElementInList(head, tempDrzava);
 	return 0;
 }
-int PrintList(PositionStates head) {
+int PrintList(PositionDrzava head) {
 	if (head == NULL)
-		printf("\r\nLista je prazna!\r\n");
+		printf(EMPTY_LIST);
 	else
 	{
 		while (head!=NULL)
 		{
-			printf(" %s\r\n", head->stateName);
-			head = head->next;
+			printf(" %s\r\n", head->nazivDrzave);
+			head = head->nextDrzava;
 		}
 	}
 	return 0;
 }
-int DeleteAll(PositionStates head) {
-	PositionStates temp;
-	printf("\r\nBrisanje cijele liste...\r\n");
-	while (head->next!=NULL)
+int DeleteAll(PositionDrzava head) {
+	PositionDrzava temp;
+	printf("\r\nBrisanje liste...");
+	while (head->nextDrzava!=NULL)
 	{
-		temp = head->next;
-		head->next = temp->next;
+		temp = head->nextDrzava;
+		head->nextDrzava = temp->nextDrzava;
 		free(temp);
 	}
-	printf("\r\nLista uspjesno obrisana!\r\n");
+	printf("\r\nLista uspjesno izbrisana!\r\n");
 	return 0;
 }
