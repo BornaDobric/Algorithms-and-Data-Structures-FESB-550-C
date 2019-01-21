@@ -1,0 +1,5 @@
+Napravi proste brojeve manje od 2104 bice.
+Napravi DecimalToRomanFunction().
+Napravi koliko je minuta preostalo do kraja dana.
+Napravi trazenje stringa iz datoteke sa korisnickim unosom broja znakova trazene rijeci i proizvoljnog slova.
+Napravi trazenje jedinstvenog stringa iz datoteke.
