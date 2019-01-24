@@ -1,5 +1,9 @@
-Napravi proste brojeve manje od 2104 bice.
-Napravi DecimalToRomanFunction().
-Napravi koliko je minuta preostalo do kraja dana.
+Pronadi proste brojeve manje od 2104 bice.
+Ako je broj manji od 21 ili veci od 73 pretvori ga u rimski zapis.
+Napravi funkciju koliko je minuta preostalo do kraja dana. U funkciju ulaze sati i minute (hh:mm).
 Napravi trazenje stringa iz datoteke sa korisnickim unosom broja znakova trazene rijeci i proizvoljnog slova.
-Napravi trazenje jedinstvenog stringa iz datoteke.
+Napravi trazenje jedinstvenog stringa iz datoteke(valjda da se nigdi ne ponavlja).
+Poredat tipove podataka od najmanjeg do najveceg: float, double, char, short, long.
+Jedan zadatak sta ce se ispisat na kraju.
+Neku petlju pribacit u pseudokod samo bez koristenja petlji. Vjerojatno rekurzijon.
+I jos jedan kojeg cu se sitit valjda.
