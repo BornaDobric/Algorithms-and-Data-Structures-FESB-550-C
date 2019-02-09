@@ -250,9 +250,9 @@ int PrintListToFile(Position head) {
 		printf(FILE_OPEN_ERROR, fileName);
 	else
 	{
-		while (head->next != NULL)
+		while (head != NULL)
 		{
-			fprintf(fp, " %s %s %d\r\n", head->next->ime, head->next->prezime, head->next->godinaRodenja);
+			fprintf(fp, " %s %s %d\r\n", head->ime, head->prezime, head->godinaRodenja);
 			head = head->next;
 		}
 		fclose(fp);
