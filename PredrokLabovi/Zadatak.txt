@@ -1,0 +1,7 @@
+Napisati program koji iz dvije datoteke čita prezimena i imena studenata kao i ocjene koje su dobili iz tih predmeta i 
+generira vezanu listu. Struktura koja se koristi za pohranu podataka treba sadržavati ime i prezime studenta, ocjenu iz P2 i ocjenu iz AiSP
+te potrebne pokazivače.
+Program radi na sljedeći način: 
+a)Iz datoteke P2.txt pročita sve studente i njihove ocjene iz P2 pri čemu nije bitan način kreiranja liste. Ispisati listu. - u prvih 45m
+b)Iz datoteke AiSP.txt se čitaju podaci i ukoliko je student položio P2(već postoji u listi) dopisuje se nova ocjena , a ukoliko
+nije položio dodaje se novi čvor liste. 
