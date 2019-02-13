@@ -1,0 +1,3 @@
+Napisati program koji: 
+a)Generira 20 slučajnih brojeva u opsegu od 10 do 20(uključujući i njih) i spremiti ih u vezanu listu po redoslijedu generiranja. -u 45m
+b)Iz liste pod a) izbrisati sve elemente koji su veći od prosjeka svih elemenata u listi.
