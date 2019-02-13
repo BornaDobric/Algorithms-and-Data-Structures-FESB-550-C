@@ -1,0 +1,1 @@
+Ispisati brojeve do 100 bez korištenja petlji(while, do...while, for).
