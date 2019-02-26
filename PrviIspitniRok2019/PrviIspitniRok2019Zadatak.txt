@@ -1,0 +1,6 @@
+Napisati program koji iz datoteke čita popis studenata (int brIndexa, char *ime, char *prezime, int orderNum) i sprema ih u vezanu listu.
+Prilikom spremanja studenta u vezanu listu potrebno je studentu dodijeliti orderNum, kao slučajno generirani cijeli broj u rasponu
+od 1 do 15. Ispisati listu.
+
+a) (Za 2) Iz tako kreirane vezane liste potrebno je kreirati novu vezanu listu u kojoj će studenti biti sortirani po prezimenu. (Obavezno
+je sortiranje prilikom unosa u listu). Ispisati listu.
