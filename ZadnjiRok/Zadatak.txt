@@ -1,0 +1,12 @@
+1. Napisati program koji:
+a) Iz datoteke studenti2702.txt čita šifru(string), ime i prezime studenta te slučajno generira prioritet svakog 
+studenta(vrijednosti od 1 do 5). Studenti se zatim pohranjuju u vezanu listu po prioritetu. Ukoliko za neki prioritet već postoji student
+s istim imenom i prezimenom, tada se ne dodaje novi element u vezanu listu, nego se samo uvećava brojač. Ispisati vezanu listu. - za 2
+
+b) Za svaki prioritet kreirati novu vezanu listu i prebaciti u nju podatke iz gornje liste. - za 3
+
+c) Napravit presjek svih pet listi, tj. pronaći studente koji se pojavljuju u svima uz dinamičko generiranje mjesta za pohranu imena i 
+prezimena studenta. - za 5
+
+NAPOMENA: Za pcjenu 2, potrebno je zatvoriti sve otvorene datoteke, pobrisati svu dinamički alociranu memoriju i mirnim putem 
+prekinuti rad programa.
