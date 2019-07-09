@@ -1,7 +1,13 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
+#include<string>
 #include<string.h>
-#define STRING_MAX_SIZE (50)
+#include<time.h>
+#define ALLOCATION_ERROR "\r\nDoslo je do greske prilikom alokacije memorije!"
+#define EMPTY_LIST "\r\nLista je prazna!"
+#define FILE_OPEN_ERROR "\r\nDoslo je do greske prilikom otvaranja datoteke!"
+#define STRING_MAX_LENGTH 50
 
 typedef struct _cvor* Position;
 typedef struct _cvor {
@@ -9,11 +15,11 @@ typedef struct _cvor {
 	Position next;
 }Cvor;
 
-int ReadFromFile(Position head);
-int Push(Position head, int broj);
-Position CreateElement(int broj);
-int GetUnija(Position lista1, Position lista2, Position unija);
-int GetPresjek(Position lista1, Position lista2, Position presjek);
+int ReadFromFile(Position head, const char *filename);
+int PushElementInList(Position head, int broj);
+int GetUnija(Position unija, Position lista1, Position lista2);
+int GetPresjek(Position presjek, Position lista1, Position lista2);
+Position CreateNewElement(int broj);
 int PrintList(Position head);
 int DeleteAll(Position head);
 
@@ -22,124 +28,52 @@ int main(int argc, char *argv[]) {
 	Cvor lista2;
 	Cvor unija;
 	Cvor presjek;
-
+	char c = 0;
 	lista1.next = NULL;
 	lista2.next = NULL;
 	unija.next = NULL;
 	presjek.next = NULL;
 
-	ReadFromFile(&lista1);
-	ReadFromFile(&lista2);
-
 	printf("\r\nLista 1: \r\n");
+	ReadFromFile(&lista1, "lista1.txt");
 	PrintList(lista1.next);
-	printf("\r\nLista 2: \r\n");
-	PrintList(lista2.next);
+	printf("\r\n--------------------------\r\n");
 
-	GetUnija(&lista1, &lista2, &unija);
-	GetPresjek(&lista1, &lista2, &presjek);
+	printf("\r\nLista 2: \r\n");
+	ReadFromFile(&lista2, "lista2.txt");
+	PrintList(lista2.next);
+	printf("\r\n--------------------------\r\n");
 
 	printf("\r\nUnija: \r\n");
+	GetUnija(&unija, &lista1, &lista2);
 	PrintList(unija.next);
+	printf("\r\n--------------------------\r\n");
+
 	printf("\r\nPresjek: \r\n");
+	GetPresjek(&presjek, &lista1, &lista2);
 	PrintList(presjek.next);
+	printf("\r\n--------------------------\r\n");
+
 
 	DeleteAll(&lista1);
 	DeleteAll(&lista2);
 	DeleteAll(&unija);
 	DeleteAll(&presjek);
+	scanf(" %c", &c);
+	return 0;
+}
 
-	return 0;
-}
-int ReadFromFile(Position head) {
-	FILE *fp;
-	char fileName[STRING_MAX_SIZE];
-	int buffer;
-	printf("\r\nUnesite ime datoteke za citanje liste: \r\n");
-	scanf(" %s", fileName);
-	fp = fopen(fileName, "r");
-	if (fp == NULL)
-		printf("\r\nDoslo je do greske prilikom otvaranja datoteke!\r\n");
-	else
-	{
-		while (!feof(fp))
-		{
-			fscanf(fp, " %d", &buffer);
-			Push(head, buffer); //u buffer je spremljen int iz datoteke
-		}
-	}
-	fclose(fp);
-	return 0;
-}
-int Push(Position head, int broj) {
-	Position newElement;
-	newElement = CreateElement(broj);
-
-	while (head->next != NULL) //dok nije kraj liste
-		head = head->next; //iduci element
-	newElement->next = head->next; //postavljanje elementa u listu
-	head->next = newElement; //promjena pokazivaca
-	return 0;
-}
-Position CreateElement(int broj) {
-	Position temp;
-	temp = (Position)malloc(sizeof(Cvor));
-	if (temp == NULL)
-		printf("\r\nDoslo je do greske prilikom alokacije memorije!\r\n");
-	else
-	{
-		temp->element = broj; //spremanje procitanog broja u listu
-		temp->next = NULL;
-	}
-	return temp;
-}
-int GetUnija(Position lista1, Position lista2, Position unija) {
-	Position temp1;
-	Position temp2;
-	temp1 = lista1->next; //zbog lakseg snalazenja 
-	temp2 = lista2->next;
-	while (temp1!=NULL && temp2!=NULL) //dok nije kraj ni prve ni druge liste
-	{
-		if (temp1->element == temp2->element)
-		{
-			Push(unija, temp1->element); //ako su jednaki upisi u uniju bilo koji
-			temp1 = temp1->next; //iduci element temp1 liste
-			temp2 = temp2->next; //iduci element temp2 liste
-		}
-		else if (temp1->element > temp2->element)
-		{
-			Push(unija, temp2->element);
-			temp2 = temp2->next; //iduci element temp2 liste
-		}
-		else
-		{	//ako je el. prve liste manji od el. druge liste
-			Push(unija, temp1->element);
-			temp1 = temp1->next; //iduci element temp1 liste
-		}
-	}
-	while (temp1!=NULL)
-	{	//proc ostatak liste koji nisu isli kroz gornju uvjetnu while petlju i upisat u uniju elemente
-		Push(unija, temp1->element);
-		temp1 = temp1->next;
-	}
-	while (temp2 != NULL)
-	{	//proc ostatak liste koji nisu isli kroz gornju uvjetnu while petlju i upisat u uniju elemente
-		Push(unija, temp2->element);
-		temp2 = temp2->next;
-	}
-	return 0;
-}
-int GetPresjek(Position lista1, Position lista2, Position presjek) {
+int GetPresjek(Position presjek, Position lista1, Position lista2) {
 	Position temp1;
 	Position temp2;
 	temp1 = lista1->next;
 	temp2 = lista2->next;
 
-	while (temp1->next!=NULL && temp2->next!=NULL)
+	while (temp1->next != NULL && temp2->next != NULL)
 	{
 		if (temp1->element == temp2->element)
 		{	//ako su jednaki pisi ih u presjek
-			Push(presjek, temp1->element);
+			PushElementInList(presjek, temp1->element);
 			temp1 = temp1->next;
 			temp2 = temp2->next;
 		}
@@ -154,22 +88,114 @@ int GetPresjek(Position lista1, Position lista2, Position presjek) {
 	}
 	return 0;
 }
-int PrintList(Position head) {
-	while (head != NULL)
+
+int GetUnija(Position unija, Position lista1, Position lista2) {
+	Position temp1;
+	Position temp2;
+	temp1 = lista1->next;
+	temp2 = lista2->next;
+	while (temp1!=NULL && temp2!=NULL)
 	{
-		printf(" %d", head->element);
-		head = head->next;
+		if (temp1->element == temp2->element)
+		{
+			PushElementInList(unija, temp1->element);
+			temp1 = temp1->next;
+			temp2 = temp2->next;
+		}
+		else if (temp1->element > temp2->element)
+		{
+			PushElementInList(unija, temp2->element);
+			temp2 = temp2->next;
+		}
+		else
+		{
+			PushElementInList(unija, temp1->element);
+			temp1 = temp1->next;
+		}
 	}
-	printf("\r\n");
+	while (temp1!=NULL)
+	{
+		PushElementInList(unija, temp1->element);
+		temp1 = temp1->next;
+	}
+	while (temp2 != NULL)
+	{
+		PushElementInList(unija, temp2->element);
+		temp2 = temp2->next;
+	}
 	return 0;
 }
+
+Position CreateNewElement(int broj) {
+	Position temp;
+	temp = (Position)malloc(sizeof(Cvor));
+	if (temp == NULL)
+		return NULL;
+	else {
+		temp->element = broj;
+		temp->next = NULL;
+	}
+	return temp;
+}
+
+int PushElementInList(Position head, int broj) {
+	Position temp;
+	temp = CreateNewElement(broj);
+	if (temp == NULL)
+		printf(ALLOCATION_ERROR);
+	else
+	{
+		while (head->next != NULL)
+			head = head->next;
+		temp->next = head->next;
+		head->next = temp;
+	}
+	return 0;
+}
+
+int ReadFromFile(Position head, const char *filename) {
+	FILE *fp;
+	Position temp;
+	char buffer[STRING_MAX_LENGTH];
+	int broj = 0;
+	fp = fopen(filename, "r");
+	if (fp == NULL)
+		printf(FILE_OPEN_ERROR);
+	else
+	{
+		while (!feof(fp))
+		{
+			fscanf(fp, " %d", &broj);
+			PushElementInList(head, broj);
+		}
+		fclose(fp);
+	}
+	return 0;
+}
+
+int PrintList(Position head) {
+	if (head == NULL)
+		printf(EMPTY_LIST);
+	else
+	{
+		while (head!=NULL)
+		{
+			printf(" %d\r\n", head->element);
+			head = head->next;
+		}
+	}
+	return 0;
+}
+
 int DeleteAll(Position head) {
 	Position temp;
+	printf("\r\nBrisanje liste...");
 	while (head->next!=NULL)
 	{
-		temp = head->next; //klasika brisanje elemenata
-		head->next = temp->next; //promjena pokazivaca
-		free(temp); //oslobodi temp
+		temp = head->next;
+		head->next = temp->next;
+		free(temp);
 	}
+	printf("\r\nLista uspjesno izbrisana!\r\n");
 	return 0;
 }
