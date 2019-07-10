@@ -6,16 +6,16 @@
 #include<time.h>
 #define ALLOCATION_ERROR "\r\nDoslo je do greske prilikom alokacije memorije!"
 #define EMPTY_LIST "\r\nLista je prazna!"
-#define FILE_OPEN_ERROR "\r\nDoslo je do greske prilikom otvaranja datoteke."
+#define FILE_OPEN_ERROR "\r\nDoslo je do greske prilikom otvaranja datoteke!"
 #define STRING_MAX_LENGTH 50
 #define FILENAME "studenti2702.txt"
 #define RAND_MIN 1
-#define RAND_MAX 5
+#define RAND_MAX 3
 
 typedef struct _cvor* Position;
 typedef struct _cvor {
-	int prioritet;
-	int brojac;
+	int orderNum;
+	int brojac = 0;
 	char sifra[STRING_MAX_LENGTH];
 	char ime[STRING_MAX_LENGTH];
 	char prezime[STRING_MAX_LENGTH];
@@ -24,31 +24,28 @@ typedef struct _cvor {
 
 int ReadFromFile(Position head);
 int PushElementInList(Position head, Position temp);
-int MakeNewList(Position head, Position lista);
+int FindSpotForSortedInput(Position head, Position temp);
 Position CreateNewElement();
 int GetRandomNumber();
-int FindSPotForSortedInput(Position head, Position temp);
 int PrintList(Position head);
 int DeleteAll(Position head);
 
-int main(int argc, char *argv[]) {
+int main() {
 	Cvor head;
-	Cvor lista;
 	char c = 0;
-	srand((unsigned)time(NULL));
 	head.next = NULL;
-	lista.next = NULL;
+	srand((unsigned)time(NULL));
+
 	ReadFromFile(&head);
 	PrintList(head.next);
-	//printf("\r\n-------------------------------\r\nNova lista: \r\n");
+
 	scanf(" %c", &c);
 	return 0;
 }
 
 int ReadFromFile(Position head) {
 	FILE *fp;
-	Position temp, pokHead;
-	pokHead = head;
+	Position temp;
 	char buffer[STRING_MAX_LENGTH];
 	fp = fopen(FILENAME, "r");
 	if (fp == NULL)
@@ -65,7 +62,7 @@ int ReadFromFile(Position head) {
 				if (fgets(buffer,STRING_MAX_LENGTH,fp)!=NULL)
 				{
 					sscanf(buffer, " %s %s %s", temp->sifra, temp->ime, temp->prezime);
-					FindSPotForSortedInput(head, temp);
+					FindSpotForSortedInput(head, temp);
 				}
 			}
 		}
@@ -74,57 +71,43 @@ int ReadFromFile(Position head) {
 	return 0;
 }
 
-int MakeNewList(Position head, Position lista) {
-	Position temp;
-	while (head->next != NULL)
-	{
-		temp = (Position)malloc(sizeof(Cvor));
-		if (temp == NULL)
-			printf(ALLOCATION_ERROR);
-		else
-		{
-			strcpy(temp->sifra, head->next->sifra);
-			strcpy(temp->ime, head->next->ime);
-			strcpy(temp->prezime, head->next->prezime);
-			temp->prioritet = head->next->prioritet;
-			while (head->next != NULL && (head->next->prioritet > temp->prioritet))
-				head = head->next;
-			PushElementInList(lista, temp);
-			head = head->next;
-		}
-	}
+int PushElementInList(Position head, Position temp) {
+	temp->next = head->next;
+	head->next = temp;
 	return 0;
 }
 
-int FindSPotForSortedInput(Position head, Position temp) {
-	while (head->next != NULL && (head->next->prioritet < temp->prioritet))
+int FindSpotForSortedInput(Position head, Position temp) {
+	while (head->next != NULL && head->next->orderNum > temp->orderNum)
 		head = head->next;
-	PushElementInList(head, temp);
+	if ((head->next != NULL) && (head->next->orderNum == temp->orderNum) && (_strcmpi(head->next->sifra, temp->sifra) == 0))
+	{
+		if (head->next->brojac < 0)
+			head->next->brojac = 2;
+		else
+			head->next->brojac++;
+	}
+	else
+		PushElementInList(head, temp);
 	return 0;
-}
-
-int GetRandomNumber() {
-	int broj = (rand() % (RAND_MAX - RAND_MIN + 1) + RAND_MIN);
-	return broj;
 }
 
 Position CreateNewElement() {
 	Position temp;
 	temp = (Position)malloc(sizeof(Cvor));
 	if (temp == NULL)
-		return NULL;
+		printf(ALLOCATION_ERROR);
 	else
 	{
-		temp->prioritet = GetRandomNumber();
+		temp->orderNum = GetRandomNumber();
 		temp->next = NULL;
 	}
 	return temp;
 }
 
-int PushElementInList(Position head, Position temp) {
-	temp->next = head->next;
-	head->next = temp;
-	return 0;
+int GetRandomNumber() {
+	int broj = (rand() % (RAND_MAX - RAND_MIN + 1) + RAND_MIN);
+	return broj;
 }
 
 int PrintList(Position head) {
@@ -134,7 +117,10 @@ int PrintList(Position head) {
 	{
 		while (head!=NULL)
 		{
-			printf(" %s %s %s %d %d\r\n", head->sifra, head->ime, head->prezime, head->prioritet, head->brojac);
+			if (head->brojac > 0)
+				printf(" %s %s %s     prioritet: %d      brojac: %d\r\n", head->sifra, head->ime, head->prezime, head->orderNum, head->brojac);
+			else
+				printf(" %s %s %s     prioritet: %d\r\n", head->sifra, head->ime, head->prezime, head->orderNum);
 			head = head->next;
 		}
 	}
@@ -150,6 +136,6 @@ int DeleteAll(Position head) {
 		head->next = temp->next;
 		free(temp);
 	}
-	printf("\r\nLista uspjesno izbrisana.\r\n");
+	printf("\r\nLista uspjesno izbrisana!\r\n");
 	return 0;
 }
